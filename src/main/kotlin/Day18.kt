@@ -111,14 +111,14 @@ class Day18 {
 
         while (addCount > 0 && line.toCharArray().filter { it == '+' || it == '*' }.size > 1) {
             val firstAdd = line.indexOfFirst { it == '+' }
-            val firstOp = line.indexOfAny(charArrayOf('+', '*'))
-            val start = if (firstAdd == firstOp) 0 else firstOp + 1
+            val previousOp = line.slice(IntRange(0, firstAdd)).lastIndexOf("*")
+            val start = if (firstAdd == previousOp || previousOp < 0) 0 else previousOp + 1
             val nextOp = line.indexOfAny(charArrayOf('+', '*'), firstAdd + 1)
             val end = if (nextOp < 0) line.lastIndex else nextOp - 1
             if (firstAdd > 0) {
                 val r = evaluate2(line.slice(IntRange(start, end)))
                 val lastIndex = line.lastIndex
-                var newline = if (start == 0) r.toString() else line.slice(IntRange(0, firstOp)) + r.toString()
+                var newline = if (start == 0) r.toString() else line.slice(IntRange(0, previousOp)) + r.toString()
 
                 if (end < lastIndex) {
                     newline += line.slice(IntRange(min(end + 1, line.lastIndex), line.lastIndex))
