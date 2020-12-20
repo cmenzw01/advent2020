@@ -24,15 +24,18 @@ class Day19 {
                     }
                 }
 
-                part1 = part1()
-//                part2 = part2(lines)
+                part1 = eval()
+
+                rules["8"] = "42 | 42 42 | 42 42 42 | 42 42 42 42 | 42 42 42 42 42 | 42 42 42 42 42 42 | 42 42 42 42 42 42 42 | 42 42 42 42 42 42 42 42"
+                rules["11"] = "42 31 | 42 42 31 31 | 42 42 42 31 31 31 | 42 42 42 42 31 31 31 31 | 42 42 42 42 42 31 31 31 31 31 | 42 42 42 42 42 42 31 31 31 31 31 31 | 42 42 42 42 42 42 42 31 31 31 31 31 31 31 | 42 42 42 42 42 42 42 42 31 31 31 31 31 31 31 31"
+                part2 = eval()
             }
 
         println("Part1: $part1")
         println("Part2: $part2")
     }
 
-    private fun part1() : Int {
+    private fun eval() : Int {
         var total = 0
 
         val regexString = buildRegex(rules["0"]!!)
@@ -54,18 +57,18 @@ class Day19 {
             regex = rule.trim('"')
         } else if (rule.contains(" | ")) {
             val parts = rule.split(" | ")
-            val part1 = parts[0].split(" ")
-            val part2 = parts[1].split(" ")
-            regex = "(" + buildRegex(rules[part1[0]]!!)
 
-            if (part1.size > 1) {
-                regex += buildRegex(rules[part1[1]]!!)
-            }
+            regex = "("
 
-            regex += "|" + buildRegex(rules[part2[0]]!!)
+            parts.forEachIndexed {index, part ->
+                val nums = part.split(" ")
+                nums.forEach { n ->
+                    regex += buildRegex(rules[n]!!)
+                }
 
-            if (part2.size > 1) {
-                regex += buildRegex(rules[part2[1]]!!)
+                if (index < parts.lastIndex) {
+                    regex += "|"
+                }
             }
 
             regex += ")"
@@ -76,13 +79,6 @@ class Day19 {
         }
 
         return regex
-    }
-
-    private fun part2(lines: List<String>) : Int {
-        var total = 0
-
-
-        return total
     }
 }
 
